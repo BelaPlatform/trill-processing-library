@@ -3,7 +3,7 @@ import static processing.core.PApplet.*;
 
 public class TrillTouch {
 	float scale = 0.25f;
-	String color = "#ffcc00";
+	String color = "00ffcc00";
 	float [] size = { 0.0f, 0.0f };
 	float [] location = { 0.0f, 0.0f };
 	boolean active = false;

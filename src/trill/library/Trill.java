@@ -18,15 +18,15 @@ public class Trill {
 	float position[] = { 0.0f, 0.0f };
 	List<String> types = Arrays.asList("bar", "square", "hex", "ring");
 	float touchScale = 0.4f;
-	String sensorColor = "#000000"; // black
-	String [] touchColors = { "#FF0000", "#0000FF", "#FFFF00", "#FFFFFF", "#00FFFF" }; // red, blue, yellow, white, cyan
+	String sensorColor = "00000000"; // black
+	String [] touchColors = { "00FF0000", "000000FF", "00FFFF00", "00FFFFFF", "0000FFFF" }; // red, blue, yellow, white, cyan
 	ArrayList<TrillTouch> trillTouches = new ArrayList<TrillTouch>(5);
 	int [] touchIndices = { -1, -1 ,-1 ,-1, -1 };
 
 	public Trill(PApplet parent, String type, float length, float [] position, float touchScale) {
 		this.parent = parent;
 		this.type = type.toLowerCase();
-		if(types.contains(this.type)) {
+		if(!types.contains(this.type)) {
 			this.type = "unknown";
 			throw new IllegalArgumentException("Unknown Trill type.");
 		}
