@@ -1,4 +1,5 @@
 package trill.library;
+
 import static processing.core.PApplet.*;
 
 public class TrillTouch {
