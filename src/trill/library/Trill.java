@@ -19,9 +19,9 @@ public class Trill {
 	List<String> types = Arrays.asList("bar", "square", "hex", "ring");
 	float touchScale = 0.4f;
 	String sensorColor = "00000080"; // black
-	String [] touchColors = { "FFFF0000", "FF0000FF", "FF00FF00", "FF00FFFF" }; // red, blue, yellow, white, cyan
+	String [] touchColors = { "FFFF0000", "FF0000FF", "FF00FF00", "FF00FFFF" }; // red, blue, green, cyan
 	ArrayList<TrillTouch> trillTouches = new ArrayList<TrillTouch>(5);
-	int [] touchIndices = { -1, -1 ,-1 ,-1, -1, -1 ,-1, -1,-1 ,-1 , -1,-1,-1,-1,-1,-1};
+	int [] touchIndices = { -1, -1 , -1 , -1, -1, -1 , -1, -1, -1 , -1 , -1, -1, -1, -1, -1, -1}; //there will be at most 16 touches (4x4 in Trill square)
 
 	public Trill(PApplet parent, String type, float length, float [] position, float touchScale) {
 		this.parent = parent;
@@ -42,7 +42,7 @@ public class Trill {
 	
 	void setMaxNumTouches() {
 		if(this.is2D()) {
-			this.maxNumTouches = 16;
+			this.maxNumTouches = 16; 
 		} else {
 			this.maxNumTouches = 5;
 		}
