@@ -10,7 +10,7 @@ public class Trill {
 	
 	String type;
 	int maxNumTouches = 5;
-	int maxTouchLocation = 3200;
+	int maxTouchLocation = 1792;
 	int maxTouchSize = 7000;
 	
 	float [] dimensions = { 0.0f, 0.0f };
@@ -18,10 +18,10 @@ public class Trill {
 	float position[] = { 0.0f, 0.0f };
 	List<String> types = Arrays.asList("bar", "square", "hex", "ring");
 	float touchScale = 0.4f;
-	String sensorColor = "00000000"; // black
-	String [] touchColors = { "00FF0000", "000000FF", "00FFFF00", "00FFFFFF", "0000FFFF" }; // red, blue, yellow, white, cyan
+	String sensorColor = "00000080"; // black
+	String [] touchColors = { "FFFF0000", "FF0000FF", "FF00FF00", "FF00FFFF" }; // red, blue, yellow, white, cyan
 	ArrayList<TrillTouch> trillTouches = new ArrayList<TrillTouch>(5);
-	int [] touchIndices = { -1, -1 ,-1 ,-1, -1 };
+	int [] touchIndices = { -1, -1 ,-1 ,-1, -1, -1 ,-1, -1,-1 ,-1 , -1,-1,-1,-1,-1,-1};
 
 	public Trill(PApplet parent, String type, float length, float [] position, float touchScale) {
 		this.parent = parent;
@@ -42,7 +42,7 @@ public class Trill {
 	
 	void setMaxNumTouches() {
 		if(this.is2D()) {
-			this.maxNumTouches = 4;
+			this.maxNumTouches = 16;
 		} else {
 			this.maxNumTouches = 5;
 		}
@@ -87,12 +87,12 @@ public class Trill {
 		if(this.is2D()) {
 			if(location.length != 2)
 				throw new IllegalArgumentException("Location for 2D Trill devices should be specified as coordinates in a 2D space.");
-			_location[1] = 1 - location[1];
+			_location[1] = location[1];
 		} else {
 			_location[1] = 0.5f;
 		}
 		if(this.touchIndices[i] == -1) {
-			this.trillTouches.add(new TrillTouch(this.touchScale, this.touchColors[i], size, _location));
+			this.trillTouches.add(new TrillTouch(this.touchScale, this.touchColors[i % 4], size, _location));
 			this.touchIndices[i] = this.trillTouches.size() - 1;
 		} else {
 			this.trillTouches.get(touchIndices[i]).update(_location, size);
@@ -100,6 +100,7 @@ public class Trill {
 	}
 	
 	public void updateTouch (int i, float location, float size) {
+		
 		this.updateTouch(i, new float[]{location, 0.0f}, new float[]{size, size});
 		
 	}
@@ -141,7 +142,9 @@ public class Trill {
 			parent.endShape(CLOSE);
 			parent.pop();
 		}
-
+        //for (int i=0;i<5;i++)
+		/*parent.print(touchIndices[i]);
+        parent.print("\n");*/
 		for(TrillTouch touch : this.trillTouches) {
 			if(touch.isActive()) {
 				this.drawTouch(touch);
@@ -156,6 +159,12 @@ public class Trill {
 
 		if(this.type == "bar" || this.type == "square") {
 			parent.ellipse(this.position[0] - this.dimensions[0] * 0.5f + this.dimensions[0] * touch.location[0], this.position[1] - this.dimensions[1] * 0.5f + this.dimensions[1] * touch.location[1], diameter[0], diameter[1]);
+		   /* parent.print("position0: ", this.position[0],"\n");
+		    parent.print("position1: ", this.position[1],"\n");
+		    parent.print("dimensions0: ", this.dimensions[0],"\n");
+		    parent.print("touchLocation0: ", touch.location[0],"\n");
+		    parent.print("touchLocation1: ", touch.location[1],"\n");*/
+
 		} else if (this.type == "ring") {
 			parent.push();
 			parent.translate(this.position[0], this.position[1]);
@@ -193,42 +202,57 @@ public class Trill {
 
 			  		int nTouches = values[0];
 			  		int nHTouches = values[1];
-				  
-					 for(i = 0; i < Math.max(nTouches, nHTouches); i++) {
+			  		float [] touchLocation = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; 
+					float [] touchSize = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; 
+					float [] touchHLocation = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; 
+					float [] touchHSize = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }; 
+			  		
+					// Vertical touches
+					 for(i = 0; i < nTouches; i++) {
 						 if(i >= maxNumTouches)
 							 break;	
 						 
-						 float [] touchLocation = { 0.0f, 0.0f }; 
-						 float [] touchSize = { 0.0f, 0.0f };
-						 
-						 // Vertical touches
-						 if(i < nTouches) {
-							 if(i*2 + 3 >= values.length) {
-								 // Malformed line...
-								 nTouches = nHTouches = 0;
-								 break; 
-							 }
-							 touchLocation[0] = values[2 + i*2]/(float)maxTouchLocation;
-							 touchSize[0] = values[2 + i*2 + 1]/(float)maxTouchSize;
+						 if(i*2 + 3 >= values.length) {
+							 // Malformed line...
+							 nTouches = nHTouches = 0;
+							 break; 
 						 }
 						 
-					     // Horizontal touches
-						 int j = i + nTouches*2;
-						 if(i < nHTouches) {
-							 if(j*2 + 3 >= values.length) {
-							     // Malformed line...
-								 nTouches = nHTouches = 0;
-							     break; 
-							 }
-							 touchLocation[1] = values[2 + j*2]/(float)maxTouchLocation;
-							 touchSize[1] = values[2 + j*2 + 1]/(float)maxTouchSize;
-						 }
+						 touchLocation[i] = values[2 + i*2]/(float)maxTouchLocation;
+						 touchSize[i] = values[2 + i*2 + 1]/(float)maxTouchSize;
+							
+					 }
+					 
+					 // Horizontal touches
+					 for(i = 0; i < nHTouches; i++) {
 						 
-						 // Update touch
-						 this.updateTouch(i,  touchLocation, touchSize);
-					  }
-			  	}
-		} else {
+						 if(i >= maxNumTouches)
+							 break;	
+					     
+						 int j = i + nTouches;
+					     
+					     if(j*2 + 3 >= values.length) {
+					    	 // Malformed line...
+					    	 nTouches = nHTouches = 0;
+							 break; 
+					     }
+					     
+					     touchHLocation[i] = values[2 + 2 * j]/(float)maxTouchLocation;
+					     touchHSize[i] = values[2 + 2*j + 1]/(float)maxTouchSize;
+						 }
+						
+						 
+					 // Update touch
+					 for(i = 0; i < nTouches; i++) {
+						 for(int j = 0; j < nHTouches; j++) {
+							 float [] pair = {touchLocation[i],touchHLocation[j]};
+							 float [] pair2 = {touchSize[i],touchHSize[j]};
+							 this.updateTouch(i * nHTouches + j, pair, pair2);
+						 
+						 
+						 }
+					 }
+			  	}} else {
 			for(i = 0; i < values.length - 1; i += 2) {
 				if(i/2 >= maxNumTouches)
 					break;	
@@ -238,3 +262,5 @@ public class Trill {
 		}
 	}
 }
+	
+		
