@@ -30,6 +30,8 @@ public class Trill {
 			this.type = "unknown";
 			throw new IllegalArgumentException("Unknown Trill type.");
 		}
+		if (this.type == "bar")
+			maxTouchLocation = 3200;
 		resize(length);
 		setPosition(position);
 		setMaxNumTouches();
@@ -66,7 +68,8 @@ public class Trill {
 		this.dimensions[0] = length;
 		if(this.type == "bar") {
 			this.dimensions[1] = length/5;
-		} if(this.type == "hex") {
+			
+		} else if(this.type == "hex") {
 			this.dimensions[1] = length/0.866f;
 		} else {
 			this.dimensions[1] = length;
@@ -74,7 +77,7 @@ public class Trill {
 
 		if(this.type == "bar") {
 			this.cornerRadius = 0.03f * this.dimensions[0];
-		} if(this.type == "square") {
+		} else if(this.type == "square") {
 			this.cornerRadius = 0.02f * this.dimensions[0];
 		} else {
 			this.cornerRadius = 0.0f;
@@ -155,7 +158,7 @@ public class Trill {
 
 	public void drawTouch(TrillTouch touch) {
 		parent.fill(unhex(touch.color));
-		float [] diameter = { this.dimensions[0]*touch.size[0]*touch.scale, this.dimensions[1]*touch.size[1]*touch.scale };
+		float [] diameter = { this.dimensions[0]*touch.size[0]*touch.scale, this.dimensions[0]*touch.size[1]*touch.scale };
 
 		if(this.type == "bar" || this.type == "square") {
 			parent.ellipse(this.position[0] - this.dimensions[0] * 0.5f + this.dimensions[0] * touch.location[0], this.position[1] - this.dimensions[1] * 0.5f + this.dimensions[1] * touch.location[1], diameter[0], diameter[1]);
