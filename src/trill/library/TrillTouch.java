@@ -44,7 +44,15 @@ public class TrillTouch {
 			 this.location[i] = location[i];
 		}
 	}
-
+	
+	public float [] getLocation() {
+		return this.location;
+	}
+	
+	public float [] getSize() {
+		return this.size;
+	}
+	
 	public void changeColor(String newColor) { this.color = newColor; }
 
 	public void changeScale(float scale) {

@@ -1,7 +1,6 @@
 import trill.library.*;
 import processing.serial.*;
 
-
 // Communication
 Serial gPort;
 int gPortNumber = 2; 
@@ -10,19 +9,17 @@ int gBaudRate = 115200;
 Trill tr;
 
 //Sensor and canvas dimensions
-// Preserve aspect ratio with real sensor
-int gSensorHeight = 150;
-int gSensorWidth = int(gSensorHeight * 4.7);
+int gSensorWidth=500;
+int gSensorHeight=500;
 int gMargin = 50;
 float [] gPosition = {(gSensorWidth+2*gMargin)/2,(gSensorHeight+2*gMargin)/2};
 
 
-
 void settings() {
-  size(int(gSensorWidth + 2*gMargin), int(gSensorHeight + 2*gMargin));
+  size(gSensorWidth + 2*gMargin, gSensorHeight + 2*gMargin);
 }
 
-void setup() {
+void setup(){
   frameRate(10);
   println("Available ports: ");
   println(Serial.list());
@@ -32,16 +29,16 @@ void setup() {
   println("Opening port " + portName);
   gPort = new Serial(this, portName, gBaudRate);
   gPort.bufferUntil('\n');
-  
-  tr = new Trill(this,"bar", gSensorWidth, gPosition);
-  background(255);
+ tr = new Trill(this,"hex", gSensorWidth, gPosition);
+ background(255);
 }
 
-void draw() {
-  background(0);
-  tr.draw();
-  tr.drawTouches();
+void draw(){
+background(0); 
+tr.draw();
+tr.drawCompoundTouch();
 }
+
 
 void serialEvent(Serial p) {
   String str = p.readString();

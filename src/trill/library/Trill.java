@@ -11,6 +11,7 @@ public class Trill {
 	String type;
 	int maxNumTouches = 5;
 	int maxTouchLocation = 1792;
+	int maxTouchHLocation = 1792;
 	int maxTouchSize = 7000;
 	
 	float [] dimensions = { 0.0f, 0.0f };
@@ -32,6 +33,10 @@ public class Trill {
 		}
 		if (this.type == "bar")
 			maxTouchLocation = 3200;
+		if (this.type == "hex") {
+			maxTouchLocation = 1920;
+			maxTouchHLocation = 1664;
+		}
 		resize(length);
 		setPosition(position);
 		setMaxNumTouches();
@@ -145,28 +150,60 @@ public class Trill {
 			parent.endShape(CLOSE);
 			parent.pop();
 		}
-        //for (int i=0;i<5;i++)
-		/*parent.print(touchIndices[i]);
-        parent.print("\n");*/
+    
+		
+	}
+
+	
+	public void drawTouches() {
+		
 		for(TrillTouch touch : this.trillTouches) {
 			if(touch.isActive()) {
 				this.drawTouch(touch);
 				touch.active = false;
 			}
 		}
+		
 	}
-
+	
+	public void drawCompoundTouch() {
+		
+		float [] avgLoc = {0.0f ,0.0f};
+		float [] avgSize = {0.0f ,0.0f};
+		int activeTouches = 0;
+		
+		for(TrillTouch touch : this.trillTouches) {
+			if(touch.isActive()) {
+				avgLoc[0] += touch.getLocation()[0]*touch.getSize()[0];
+				avgLoc[1] += touch.getLocation()[1]*touch.getSize()[1];
+				avgSize[0] += touch.getSize()[0];
+				avgSize[1] += touch.getSize()[1];
+				activeTouches++;
+				touch.active = false;
+			}
+			
+		}
+		
+		
+		if (activeTouches > 0) {
+				
+			avgSize[0] /= (float)activeTouches;
+			avgSize[1] /= (float)activeTouches;
+			avgLoc[0] /= ((float)activeTouches * avgSize[0]);	
+			avgLoc[1] /= ((float)activeTouches * avgSize[1]);
+			
+			TrillTouch t1 = new TrillTouch(this.touchScale,  "FFFF0000", avgSize, avgLoc);
+			drawTouch(t1);
+		}
+	}
+	
 	public void drawTouch(TrillTouch touch) {
 		parent.fill(unhex(touch.color));
 		float [] diameter = { this.dimensions[0]*touch.size[0]*touch.scale, this.dimensions[0]*touch.size[1]*touch.scale };
 
 		if(this.type == "bar" || this.type == "square") {
-			parent.ellipse(this.position[0] - this.dimensions[0] * 0.5f + this.dimensions[0] * touch.location[0], this.position[1] - this.dimensions[1] * 0.5f + this.dimensions[1] * touch.location[1], diameter[0], diameter[1]);
-		   /* parent.print("position0: ", this.position[0],"\n");
-		    parent.print("position1: ", this.position[1],"\n");
-		    parent.print("dimensions0: ", this.dimensions[0],"\n");
-		    parent.print("touchLocation0: ", touch.location[0],"\n");
-		    parent.print("touchLocation1: ", touch.location[1],"\n");*/
+			parent.ellipse(this.position[0] - this.dimensions[0] * 0.5f + this.dimensions[0] * touch.location[0], this.position[1] - this.dimensions[1] * 0.5f + this.dimensions[1] * (1 - touch.location[1]), diameter[0], diameter[1]);
+		   
 
 		} else if (this.type == "ring") {
 			parent.push();
@@ -178,7 +215,7 @@ public class Trill {
 			parent.ellipse((this.dimensions[0] * 0.5f) * cos(_radial), (this.dimensions[0] * 0.5f) * sin(_radial), diameter[0], diameter[1]);
 			parent.pop();
 		} else if (this.type == "hex") {
-			parent.ellipse((this.position[0] - this.dimensions[0] * 0.5f) + touch.location[0] * this.dimensions[0], (this.position[1] - this.dimensions[1] * 0.5f) + touch.location[1] * this.dimensions[1], diameter[0], diameter[1]);
+			parent.ellipse((this.position[0] - this.dimensions[0] * 0.5f) + touch.location[0] * this.dimensions[0], (this.position[1] - this.dimensions[1] * 0.5f) + (1 - touch.location[1]) * this.dimensions[1], diameter[0], diameter[1]);
 		}
 	}
 
@@ -240,17 +277,18 @@ public class Trill {
 							 break; 
 					     }
 					     
-					     touchHLocation[i] = values[2 + 2 * j]/(float)maxTouchLocation;
+					     touchHLocation[i] = values[2 + 2 * j]/(float)maxTouchHLocation;
 					     touchHSize[i] = values[2 + 2*j + 1]/(float)maxTouchSize;
 						 }
-						
-						 
+					
+					
 					 // Update touch
 					 for(i = 0; i < nTouches; i++) {
 						 for(int j = 0; j < nHTouches; j++) {
-							 float [] pair = {touchLocation[i],touchHLocation[j]};
-							 float [] pair2 = {touchSize[i],touchHSize[j]};
+							 float [] pair = {touchHLocation[j],touchLocation[i]};
+							 float [] pair2 = {touchHSize[j],touchSize[i]};
 							 this.updateTouch(i * nHTouches + j, pair, pair2);
+								
 						 
 						 
 						 }
