@@ -20,7 +20,7 @@ public class Trill {
 	List<String> types = Arrays.asList("bar", "square", "hex", "ring");
 	float touchScale = 0.4f;
 	String sensorColor = "00000080"; // black
-	String [] touchColors = { "FFFF0000", "FF0000FF", "FF00FF00", "FF00FFFF" }; // red, blue, green, cyan
+	String [] touchColors = { "FFFF0000", "FF0000FF", "FF00FF00", "FF00FFFF", "FFFFFF00" }; // red, blue, green, cyan, yellow
 	ArrayList<TrillTouch> trillTouches = new ArrayList<TrillTouch>(5);
 	int [] touchIndices = { -1, -1 , -1 , -1, -1, -1 , -1, -1, -1 , -1 , -1, -1, -1, -1, -1, -1}; //there will be at most 16 touches (4x4 in Trill square)
 
@@ -33,10 +33,13 @@ public class Trill {
 		}
 		if (this.type == "bar")
 			maxTouchLocation = 3200;
-		if (this.type == "hex") {
+		else if (this.type == "hex") {
 			maxTouchLocation = 1920;
 			maxTouchHLocation = 1664;
 		}
+		else if (this.type == "ring")
+				maxTouchLocation = 3584;
+		
 		resize(length);
 		setPosition(position);
 		setMaxNumTouches();
@@ -100,7 +103,7 @@ public class Trill {
 			_location[1] = 0.5f;
 		}
 		if(this.touchIndices[i] == -1) {
-			this.trillTouches.add(new TrillTouch(this.touchScale, this.touchColors[i % 4], size, _location));
+			this.trillTouches.add(new TrillTouch(this.touchScale, this.touchColors[i % 5], size, _location));
 			this.touchIndices[i] = this.trillTouches.size() - 1;
 		} else {
 			this.trillTouches.get(touchIndices[i]).update(_location, size);

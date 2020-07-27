@@ -42,5 +42,12 @@ tr.drawCompoundTouch();
 
 void serialEvent(Serial p) {
   String str = p.readString();
-  tr.serialParse(str);
+  
+  try {
+    tr.serialParse(str);
+  }
+  catch(RuntimeException e) {
+    e.printStackTrace();
+  }
+
 }

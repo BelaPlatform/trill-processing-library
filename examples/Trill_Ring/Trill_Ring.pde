@@ -11,7 +11,7 @@ Trill tr;
 //Sensor and canvas dimensions
 int gSensorWidth=500;
 int gSensorHeight=500;
-int gMargin = 50;
+int gMargin = 100;
 float [] gPosition = {(gSensorWidth+2*gMargin)/2,(gSensorHeight+2*gMargin)/2};
 
 
@@ -29,7 +29,7 @@ void setup(){
   println("Opening port " + portName);
   gPort = new Serial(this, portName, gBaudRate);
   gPort.bufferUntil('\n');
- tr = new Trill(this,"square", gSensorWidth, gPosition);
+ tr = new Trill(this,"ring", gSensorWidth, gPosition);
  background(255);
 }
 
