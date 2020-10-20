@@ -41,11 +41,12 @@ void draw(){
 	background(255);
 	// Draw sensor
 	trill.draw();
-	// Draw touches on sensor
-	trill.drawTouches();
-	// Alternatively, you can use trill.drawCompoundTouch()to draw
-	//  a single point averaging all the vertical and horizontal
-	//  touch components of the 2D sensor
+	// Draw a single touch averaging the vertical and horizontal
+	// components of the 2D sensor
+	trill.drawCompoundTouch();
+	// You can alternatively use trill.drawTouches() to draw all
+	// the independent touch components
+	//trill.drawTouches();
 }
 
 // This function is called whenever new serial data is available
