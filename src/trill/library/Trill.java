@@ -220,6 +220,14 @@ public class Trill {
 	}
 
 	public void serialParse(String serialString) {
+		int touchIndex = serialString.indexOf("T");
+		if(touchIndex >= 0) {
+			serialString = serialString.substring(touchIndex+1);
+		}
+		int buttonIndex = serialString.indexOf("B");
+		if(buttonIndex != -1) {
+			return;
+		}
 		String inString = trim(serialString);
 		int[] values = Arrays.asList(split(inString, " ")).stream().mapToInt(Integer::parseInt).toArray();
 		int i;
