@@ -19,8 +19,8 @@ public class Trill {
 	float position[] = { 0.0f, 0.0f };
 	List<String> types = Arrays.asList("bar", "square", "hex", "ring");
 	float touchScale = 0.4f;
-	String sensorColor = "00000080"; // black
-	String [] touchColors = { "FFFF0000", "FF0000FF", "FF00FF00", "FF00FFFF", "FFFFFF00" }; // red, blue, green, cyan, yellow
+	String sensorColor = "FF000000"; // black
+	String [] touchColors = { "FFFF0000", "FF0000FF", "FFFFFF00", "FFFFFFFF", "FF00FFFF" }; // red, blue, yellow, white, cyan
 	ArrayList<TrillTouch> trillTouches = new ArrayList<TrillTouch>(5);
 	int [] touchIndices = { -1, -1 , -1 , -1, -1, -1 , -1, -1, -1 , -1 , -1, -1, -1, -1, -1, -1}; //there will be at most 16 touches (4x4 in Trill square)
 
@@ -179,6 +179,8 @@ public class Trill {
 		if (activeTouches > 0) {
 			avgSize[0] /= (float)activeTouches;
 			avgSize[1] /= (float)activeTouches;
+			avgSize[0] = 0.5f*(avgSize[0]+avgSize[1]);
+			avgSize[1] = 0.5f*(avgSize[0]+avgSize[1]);
 			avgLoc[0] /= ((float)activeTouches * avgSize[0]);
 			avgLoc[1] /= ((float)activeTouches * avgSize[1]);
 
