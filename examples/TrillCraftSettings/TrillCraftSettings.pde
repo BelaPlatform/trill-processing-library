@@ -47,9 +47,9 @@ void setup() {
   gPort.bufferUntil('\n');
 
   // Set dimensions of display window
-  size(1000, 500);
+  size(1100, 700);
   // Compute char dimensions based on window size
-  chartBottom = height - chartTop - 130;
+  chartBottom = height - chartTop - 200;
   chartRight = width - chartLeft;
 
   cp5 = new ControlP5(this);
@@ -110,9 +110,16 @@ void draw() {
     pop();
 
     float textY = textBoxY+0.75*textBoxH;
+    float listY = textBoxY+0.5*textBoxH;
     text("COMMAND INPUT:", textBoxX-120, textY);
     text("PREVIOUS INPUT:", textBoxX-120, textY+textBoxH);
     text(command, textBoxX, textY+textBoxH);
+    text("OPTIONS:", chartRight-200, listY);
+    text("prescalar: 1-8", chartRight-200, listY+15);
+    text("threshold: 0-100", chartRight-200, listY+30);
+    text("bits: 9-16", chartRight-200, listY+45);
+    text("mode: centroid, raw, baseline, differential", chartRight-200, listY+60);
+    text("baseline resets the baseline capacitance", chartRight-200, listY+75);
   }
 }
 
