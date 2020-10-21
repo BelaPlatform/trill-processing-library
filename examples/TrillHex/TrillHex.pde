@@ -22,7 +22,7 @@ void settings() {
 }
 
 void setup(){
-	frameRate(10);
+	frameRate(20);
 	println("Available ports: ");
 	println(Serial.list());
 
