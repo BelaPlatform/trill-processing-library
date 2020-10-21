@@ -35,7 +35,7 @@ int textBoxW;
 int textBoxH = 30;
 Textfield commandTextField;
 ScrollableList commandList;
-String commandArray[] = {"prescaler:", "threshold:", "bits:", "mode:", "baseline"};
+String commandArray[] = {"baseline", "prescaler:", "threshold:", "bits:", "mode:"};
 void setup() {
   println("Available ports: ");
   println(Serial.list());
@@ -66,7 +66,7 @@ void setup() {
 
   commandList = cp5.addScrollableList("commands")
      .setPosition(textBoxX+textBoxW+20, textBoxY)
-     .setSize(150, 60)
+     .setSize(150, 100)
      .setBarHeight(20)
      .setItemHeight(20)
      .setColorBackground(color(0))
