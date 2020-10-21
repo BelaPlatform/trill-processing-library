@@ -35,7 +35,7 @@ int textBoxW;
 int textBoxH = 30;
 Textfield commandTextField;
 ScrollableList commandList;
-String commandArray[] = {"t", "prescaler:", "threshold:", "bits:", "mode:", "baseline"};
+String commandArray[] = {"prescaler:", "threshold:", "bits:", "mode:", "baseline"};
 void setup() {
   println("Available ports: ");
   println(Serial.list());
@@ -146,5 +146,5 @@ public void command(String text) {
 // Function to be called when command is selected from scrollable list
 void commands(int n) {
   String cmnd = cp5.get(ScrollableList.class, "commands").getItem(n).get("text").toString();
-  commandTextField.setText(cmnd);
+  commandTextField.setText(cmnd+" ");
 }
