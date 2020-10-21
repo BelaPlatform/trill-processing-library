@@ -1,5 +1,4 @@
-
-// Function to be called when command text box reimport processing.serial.*;
+import processing.serial.*;
 import controlP5.*;
 import java.util.*;
 
