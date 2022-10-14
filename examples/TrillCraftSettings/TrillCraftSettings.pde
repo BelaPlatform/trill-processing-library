@@ -102,12 +102,12 @@ void draw() {
     //textAlign(CENTER);
     text(str(i), x-0.5*textWidth(str(i)), chartBottom+20);
 
-    push();
+    pushMatrix();
     textAlign(RIGHT, CENTER);
     translate(x, chartBottom + 40);
     rotate(-HALF_PI);
     text(data, 0, 0);
-    pop();
+    popMatrix();
 
     float textY = textBoxY+0.75*textBoxH;
     float listY = textBoxY+0.5*textBoxH;
